@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoilLife</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --green:    #1e5c2e;
+  --green-lt: #e8f5ee;
+  --green-dk: #163f20;
+  --white:    #ffffff;
+  --ink:      #1a1a1a;
+  --mid:      #555;
+  --light:    #999;
+  --border:   #e8e2da;
+  --sand:     #fdf8f2;
+  --r:        18px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--sand);
+  color: var(--ink);
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+.nav {
+  background: var(--white);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1.5px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-logo {
+  width: 48px; height: 48px;
+  background: var(--green);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-shrink: 0;
+}
+.nav-brand { flex: 1; }
+.nav-name {
+  font-size: 1.3rem; font-weight: 900;
+  color: var(--green); line-height: 1;
+}
+.nav-tagline {
+  font-size: 0.72rem; color: var(--mid);
+  font-weight: 600; margin-top: 1px;
+}
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-lang {
+  display: flex; align-items: center; gap: 5px;
+  border: 1.5px solid var(--border);
+  border-radius: 50px; padding: 7px 13px;
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--mid); cursor: pointer;
+  background: var(--white);
+  font-family: 'Nunito', sans-serif;
+}
+.nav-speaker {
+  width: 44px; height: 44px;
+  background: var(--green);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border: none; flex-shrink: 0;
+  transition: background 0.2s, transform 0.15s;
+}
+.nav-speaker:active { transform: scale(0.92); }
+.nav-speaker svg { width: 22px; height: 22px; fill: white; }
+
+/* ── HERO TEXT ── */
+.hero {
+  padding: 28px 20px 20px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 2rem; font-weight: 900;
+  color: var(--ink); line-height: 1.18;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.hero-sub {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+  font-size: 0.9rem; font-weight: 600;
+  color: var(--mid);
+}
+
+/* ── PROBLEM CARDS ── */
+.prob-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 18px 16px 8px;
+}
+.prob-card {
+  border-radius: var(--r);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--white);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  transition: transform 0.18s, box-shadow 0.18s;
+  border: 1.5px solid transparent;
+  position: relative;
+}
+.prob-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.13);
+}
+.prob-card:active { transform: scale(0.97); }
+
+/* Photo area */
+.prob-photo {
+  width: 100%; height: 140px;
+  object-fit: cover;
+  display: block;
+  background: #ccc; /* fallback */
+}
+/* Real photos via CSS background */
+.photo-dry    { background: url('https://images.unsplash.com/photo-1566408669374-5a6d5dca1ef5?w=400&q=80') center/cover; }
+.photo-pest   { background: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400&q=80') center/cover; }
+.photo-flood  { background: url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80') center/cover; }
+.photo-yellow { background: url('https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80') center/cover; }
+.photo-erode  { background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80') center/cover; }
+.photo-yield  { background: url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400&q=80') center/cover; }
+
+.prob-photo-area {
+  width: 100%; height: 140px;
+  position: relative;
+}
+
+/* Icon circle overlapping photo & label */
+.prob-icon-wrap {
+  position: absolute;
+  bottom: -22px; left: 50%;
+  transform: translateX(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  z-index: 2;
+}
+.prob-label-area {
+  padding: 28px 10px 16px;
+  text-align: center;
+}
+.prob-name {
+  font-size: 0.95rem; font-weight: 900;
+  color: var(--ink); line-height: 1.2;
+}
+
+/* card accent colors */
+.c-sand   { background: #fff8f0; }
+.c-pink   { background: #fff0f3; }
+.c-blue   { background: #f0f5ff; }
+.c-green  { background: #f0fff5; }
+.c-brown  { background: #fff5ee; }
+.c-yellow { background: #fffdf0; }
+
+/* ── VOICE BAR ── */
+.voice-bar {
+  margin: 16px 16px 8px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.voice-bar:hover { border-color: var(--green); background: var(--green-lt); }
+.voice-mic {
+  width: 46px; height: 46px;
+  background: var(--green);
+  border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  animation: glow 2.2s ease-in-out infinite;
+}
+@keyframes glow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(30,92,46,.45); }
+  50%      { box-shadow: 0 0 0 9px rgba(30,92,46,0); }
+}
+.voice-text strong {
+  display: block; font-size: 0.95rem;
+  font-weight: 800; color: var(--ink);
+}
+.voice-text span {
+  font-size: 0.78rem; color: var(--mid);
+  font-weight: 600; margin-top: 2px; display: block;
+}
+
+/* ── CONTACT US ── */
+.contact-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+  margin: 10px 16px 0;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 13px 18px;
+  font-size: 0.88rem; font-weight: 800;
+  color: var(--green); cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: background 0.18s, border-color 0.18s;
+  width: calc(100% - 32px);
+}
+.contact-btn:hover { background: var(--green-lt); border-color: var(--green); }
+.contact-btn:active { transform: scale(0.98); }
+
+/* ── BOTTOM NAV ── */
+.page-end { height: 96px; }
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: var(--white);
+  border-top: 1.5px solid var(--border);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  padding: 8px 0 18px;
+  box-shadow: 0 -4px 18px rgba(0,0,0,0.08);
+  z-index: 100;
+}
+.bnav {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 3px;
+  background: none; border: none;
+  cursor: pointer; font-family: 'Nunito', sans-serif;
+  transition: transform 0.12s;
+  padding: 0;
+}
+.bnav:active { transform: scale(0.88); }
+.bnav-icon {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+}
+.bnav-icon svg { width: 26px; height: 26px; }
+.bnav-label {
+  font-size: 0.65rem; font-weight: 700;
+  color: var(--light);
+}
+.bnav.active .bnav-label { color: var(--green); }
+.bnav.active .bnav-icon svg { stroke: var(--green); }
+.bnav.earn .bnav-label { color: #b07d00; }
+.bnav.earn .bnav-icon svg { stroke: #c8920a; }
+.bnav.earn.active .bnav-label { color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-logo">🌿</div>
+  <div class="nav-brand">
+    <div class="nav-name">SoilLife</div>
+    <div class="nav-tagline">Better soil. Better crops. Better life.</div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-lang">
+      <!-- Globe icon -->
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Language
+    </div>
+    <!-- Speaker icon (not microphone) -->
+    <button class="nav-speaker" title="Listen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <h1>What is your problem today?</h1>
+  <div class="hero-sub">
+    <span>👆</span>
+    <span>Tap a problem to get simple solutions</span>
+  </div>
+</section>
+
+<!-- ── PROBLEM CARDS ── -->
+<div class="prob-grid">
+
+  <div class="prob-card c-sand">
+    <div class="prob-photo-area photo-dry">
+      <div class="prob-icon-wrap">🌵</div>
+    </div>
+    <div class="prob-label-area">
+      <div class="prob-name">Dry Soil</div>
+    </div>
+  </div>
+
+  <div class="prob-card c-pink">
+    <div class="prob-photo-area photo-pest">
+      <div class="prob-icon-wrap">🐛</div>
+    </div>
+    <div class="prob-label-area">
+      <div class="prob-name">Pest Damage</div>
+    </div>
+  </div>
+
+  <div class="prob-card c-blue">
+    <div class="prob-photo-area photo-flood">
+      <div class="prob-icon-wrap">💧</div>
+    </div>
+    <div class="prob-label-area">
+      <div class="prob-name">Flooded Field</div>
+    </div>
+  </div>
+
+  <div class="prob-card c-yellow">
+    <div class="prob-photo-area photo-yellow">
+      <div class="prob-icon-wrap">🍂</div>
+    </div>
+    <div class="prob-label-area">
+      <div class="prob-name">Yellow Leaves</div>
+    </div>
+  </div>
+
+  <div class="prob-card c-brown">
+    <div class="prob-photo-area photo-erode">
+      <div class="prob-icon-wrap">⛰️</div>
+    </div>
+    <div class="prob-label-area">
+      <div class="prob-name">Soil Erosion</div>
+    </div>
+  </div>
+
+  <div class="prob-card c-green">
+    <div class="prob-photo-area photo-yield">
+      <div class="prob-icon-wrap">📉</div>
+    </div>
+    <div class="prob-label-area">
+      <div class="prob-name">Low Harvest</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── VOICE BAR ── -->
+<div class="voice-bar">
+  <div class="voice-mic">🎙️</div>
+  <div class="voice-text">
+    <strong>Or speak your problem</strong>
+    <span>Tap the mic and tell us what's wrong</span>
+  </div>
+</div>
+
+<!-- ── CONTACT US ── -->
+<button class="contact-btn">
+  ✉️ Contact Us
+</button>
+
+<div class="page-end"></div>
+
+<!-- ── BOTTOM NAV ── -->
+<nav class="bottom-nav">
+
+  <button class="bnav active">
+    <div class="bnav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1e5c2e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <span class="bnav-label">Home</span>
+  </button>
+
+  <button class="bnav">
+    <div class="bnav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polygon points="10 8 16 12 10 16 10 8"/>
+      </svg>
+    </div>
+    <span class="bnav-label">Watch</span>
+  </button>
+
+  <button class="bnav">
+    <div class="bnav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+      </svg>
+    </div>
+    <span class="bnav-label">Saved</span>
+  </button>
+
+  <button class="bnav earn">
+    <div class="bnav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#c8920a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="16"/>
+        <line x1="8" y1="12" x2="16" y2="12"/>
+      </svg>
+    </div>
+    <span class="bnav-label">Earn Rewards</span>
+  </button>
+
+</nav>
+
+<script>
+// Bottom nav active
+document.querySelectorAll('.bnav').forEach(btn => {
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('.bnav').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Speaker button
+document.querySelector('.nav-speaker').addEventListener('click', function () {
+  this.style.background = '#c8920a';
+  setTimeout(() => this.style.background = '', 600);
+});
+
+// Language cycle
+document.querySelector('.nav-lang').addEventListener('click', function () {
+  const langs = [
+    ['🌐','Language'],['🌐','Français'],['🌐','Kiswahili'],['🌐','हिन्दी']
+  ];
+  const cur = this.dataset.i ? parseInt(this.dataset.i) : 0;
+  const next = (cur + 1) % langs.length;
+  this.dataset.i = next;
+  this.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> ${langs[next][1]}`;
+});
+</script>
+</body>
+</html>
